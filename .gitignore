@@ -2,4 +2,4 @@
 .vscode
 
 # Archivos JavaScript
-wwwroot/js/*.js
+wwwroot/js
