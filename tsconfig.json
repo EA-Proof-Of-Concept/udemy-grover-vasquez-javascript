@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "commonjs",
+        "rootDir": "./src",
+        "outDir": "./wwwroot/js",
+        "removeComments": false,
+        "newLine": "crlf",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictPropertyInitialization": true,
+        "skipLibCheck": true
+    },
+    "include": [
+        "./src"
+    ],
+    "exclude": [
+        "./wwwroot"
+    ]
+}
