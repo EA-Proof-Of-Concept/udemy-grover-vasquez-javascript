@@ -7,7 +7,7 @@
  * Contiene los dígitos y operadores que deben 
  * @type {string[]}
  */
-const operators: string[] = ['/', 'X', '+', '-', '='];
+const keys: string[] = ['/', 'X', '+', '-', '='];
 
 
 // Este evento de dispara al finalizar la carga completa del documento HTML.

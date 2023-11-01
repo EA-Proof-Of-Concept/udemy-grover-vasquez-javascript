@@ -22,40 +22,100 @@
         <main class="container">
             <!-- Contenido principal -->
             <div class="row">
-                <div class="col-3 offset-4">
-                    <input type="text" id="result" class="form-control fw-bold text-end" placeholder="0" readonly>
-                </div>
-            </div>
-            <div class="row mt-2">
-                <div class="col-3 offset-4">
-                    <button type="button" class="btn btn-outline-primary gx-1">7</button>
-                    <button type="button" class="btn btn-outline-primary">8</button>
-                    <button type="button" class="btn btn-outline-primary">9</button>
-                    <button type="button" class="btn btn-outline-primary">/</button>
-                </div>
-            </div>
-            <div class="row mt-2">
                 <div class="col-4 offset-4">
-                    <button type="button" class="btn btn-outline-primary">4</button>
-                    <button type="button" class="btn btn-outline-primary">5</button>
-                    <button type="button" class="btn btn-outline-primary">6</button>
-                    <button type="button" class="btn btn-outline-primary">X</button>
+                    <div class="card" id="calculator">
+                        <div class="card-header container">
+                            <div class="row mt-4 mb-4">
+                                <div class="col">
+                                    <input type="text" id="result" class="form-control fw-bold text-end"
+                                           placeholder="0" style="height: 3rem;" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-3 d-grid">
+                                    <button type="button" class="btn btn-primary">C</button>
+                                </div>
+                                <div class="col-3 d-grid">
+                                    <button type="button" class="btn btn-primary">DEL</button>
+                                </div>
+                                <div class="col-3 d-grid">
+                                    <button type="button" class="btn btn-primary">%</button>
+                                </div>
+                                <div class="col-3 d-grid">
+                                    <button type="button" class="btn btn-success">/</button>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-3 d-grid">
+                                    <button type="button" class="btn btn-primary">7</button>
+                                </div>
+                                <div class="col-3 d-grid">
+                                    <button type="button" class="btn btn-primary">8</button>
+                                </div>
+                                <div class="col-3 d-grid">
+                                    <button type="button" class="btn btn-primary">9</button>
+                                </div>
+                                <div class="col-3 d-grid">
+                                    <button type="button" class="btn btn-success">X</button>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-3 d-grid">
+                                    <button type="button" class="btn btn-primary">4</button>
+                                </div>
+                                <div class="col-3 d-grid">
+                                    <button type="button" class="btn btn-primary">5</button>
+                                </div>
+                                <div class="col-3 d-grid">
+                                    <button type="button" class="btn btn-primary">6</button>
+                                </div>
+                                <div class="col-3 d-grid">
+                                    <button type="button" class="btn btn-success">-</button>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-3 d-grid">
+                                    <button type="button" class="btn btn-primary">1</button>
+                                </div>
+                                <div class="col-3 d-grid">
+                                    <button type="button" class="btn btn-primary">2</button>
+                                </div>
+                                <div class="col-3 d-grid">
+                                    <button type="button" class="btn btn-primary">3</button>
+                                </div>
+                                <div class="col-3 d-grid">
+                                    <button type="button" class="btn btn-success">+</button>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-3 d-grid"></div>
+                                <div class="col-3 d-grid">
+                                    <button type="button" class="btn btn-primary">0</button>
+                                </div>
+                                <div class="col-3 d-grid">
+                                    <button type="button" class="btn btn-primary">.</button>
+                                </div>
+                                <div class="col-3 d-grid">
+                                    <button type="button" class="btn btn-danger">=</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <button type="button"></button>
-            <button type="button"></button>
-            <button type="button"></button>
-            <button type="button"></button>
-            <button type="button"></button>
-            <button type="button"></button>
-            <button type="button"></button>
-            <button type="button"></button>
             </div>
         </main>
 
         <footer class="text-center fixed-bottom">
             <p class="text-muted">Udemy | Grover Vásquez</p>
         </footer>
+
+        <template id="key">
+            <div class="col-3 d-grid">
+                <button type="button" class="btn"></button>
+            </div>
+        </template>
 
         <!-- Bootstrap -->
         <script type="text/javascript"
