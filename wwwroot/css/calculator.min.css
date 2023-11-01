@@ -17,5 +17,15 @@ body {
 }
 
 .ea-result {
+    background-color: #3B3B3B;
+    border: none;
+    color: white;
     height: 4rem;
+}
+
+.ea-result:focus {
+    background-color: #3B3B3B;
+    border: none;
+    box-shadow: none;
+    color: white;
 }
