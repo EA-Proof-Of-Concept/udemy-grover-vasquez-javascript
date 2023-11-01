@@ -7,9 +7,15 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css");
 
 body {
-    background-color: #1D2E41;
+    background-color: #242526;
+    color: white;
+    margin: auto;
 }
 
 .card {
     background-color: #3B3B3B;
+}
+
+.ea-result {
+    height: 4rem;
 }

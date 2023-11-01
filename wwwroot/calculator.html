@@ -14,104 +14,34 @@
 
     <body>
         <header class="container mt-5">
-            <h1>Master</h1>
-            <p class="lead">Introducción a la Programación con JavaScript.</p>
+            <h2>Sección 6: Desarrollo de una calculadora con HTML5 y JavaScript.</h2>
+            <p class="lead">
+                <strong>Objetivo de la sección:</strong> Poner en práctica los adquiridos en
+                el curso de "Introducción a la Programación con JavaScript".
+            </p>
             <hr>
         </header>
 
         <main class="container">
-            <!-- Contenido principal -->
             <div class="row">
-                <div class="col-4 offset-4">
-                    <div class="card" id="calculator">
-                        <div class="card-header container">
-                            <div class="row mt-4 mb-4">
-                                <div class="col">
-                                    <input type="text" id="result" class="form-control fw-bold text-end"
-                                           placeholder="0" style="height: 3rem;" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-3 d-grid">
-                                    <button type="button" class="btn btn-primary">C</button>
-                                </div>
-                                <div class="col-3 d-grid">
-                                    <button type="button" class="btn btn-primary">DEL</button>
-                                </div>
-                                <div class="col-3 d-grid">
-                                    <button type="button" class="btn btn-primary">%</button>
-                                </div>
-                                <div class="col-3 d-grid">
-                                    <button type="button" class="btn btn-success">/</button>
-                                </div>
-                            </div>
-                            <div class="row mt-2">
-                                <div class="col-3 d-grid">
-                                    <button type="button" class="btn btn-primary">7</button>
-                                </div>
-                                <div class="col-3 d-grid">
-                                    <button type="button" class="btn btn-primary">8</button>
-                                </div>
-                                <div class="col-3 d-grid">
-                                    <button type="button" class="btn btn-primary">9</button>
-                                </div>
-                                <div class="col-3 d-grid">
-                                    <button type="button" class="btn btn-success">X</button>
-                                </div>
-                            </div>
-                            <div class="row mt-2">
-                                <div class="col-3 d-grid">
-                                    <button type="button" class="btn btn-primary">4</button>
-                                </div>
-                                <div class="col-3 d-grid">
-                                    <button type="button" class="btn btn-primary">5</button>
-                                </div>
-                                <div class="col-3 d-grid">
-                                    <button type="button" class="btn btn-primary">6</button>
-                                </div>
-                                <div class="col-3 d-grid">
-                                    <button type="button" class="btn btn-success">-</button>
-                                </div>
-                            </div>
-                            <div class="row mt-2">
-                                <div class="col-3 d-grid">
-                                    <button type="button" class="btn btn-primary">1</button>
-                                </div>
-                                <div class="col-3 d-grid">
-                                    <button type="button" class="btn btn-primary">2</button>
-                                </div>
-                                <div class="col-3 d-grid">
-                                    <button type="button" class="btn btn-primary">3</button>
-                                </div>
-                                <div class="col-3 d-grid">
-                                    <button type="button" class="btn btn-success">+</button>
-                                </div>
-                            </div>
-                            <div class="row mt-2">
-                                <div class="col-3 d-grid"></div>
-                                <div class="col-3 d-grid">
-                                    <button type="button" class="btn btn-primary">0</button>
-                                </div>
-                                <div class="col-3 d-grid">
-                                    <button type="button" class="btn btn-primary">.</button>
-                                </div>
-                                <div class="col-3 d-grid">
-                                    <button type="button" class="btn btn-danger">=</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div id="calculator" class="col-4 offset-4"></div>
             </div>
         </main>
 
-        <footer class="text-center fixed-bottom">
-            <p class="text-muted">Udemy | Grover Vásquez</p>
-        </footer>
+        <template id="tmp-calculator">
+            <div class="card">
+                <div class="card-header container">
+                    <div class="row mt-4 mb-4">
+                        <div class="col">
+                            <input type="text" class="ea-result form-control fs-1 text-end" value="0" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body container"></div>
+            </div>
+        </template>
 
-        <template id="key">
+        <template id="tmp-key">
             <div class="col-3 d-grid">
                 <button type="button" class="btn"></button>
             </div>
