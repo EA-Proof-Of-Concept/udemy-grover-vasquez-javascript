@@ -1,5 +1,8 @@
 # Visual Studio Code
 .vscode
 
+# Node modules
+node_modules/*
+
 # Archivos JavaScript
 wwwroot/js

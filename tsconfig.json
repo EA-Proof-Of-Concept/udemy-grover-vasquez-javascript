@@ -9,15 +9,16 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "strict": true,
-        "strictNullChecks": true,
+        "strictNullChecks": false,
         "strictFunctionTypes": true,
-        "strictPropertyInitialization": true,
+        "strictPropertyInitialization": false,
         "skipLibCheck": true
     },
     "include": [
         "./src"
     ],
     "exclude": [
+        "./node_modules",
         "./wwwroot"
     ]
 }
