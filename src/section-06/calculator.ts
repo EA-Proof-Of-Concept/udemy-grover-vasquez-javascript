@@ -3,12 +3,12 @@
  * Derechos intelecutales reservados.
  */
 
-type Led = JQuery<HTMLInputElement>;
 /**
- * Representa un conjunto de elementos HTML que conforman un componente de la
- * pantalla que mira el usuario.
+ * Representa una tecla de la calculadora.
  */
-type Key = JQuery<HTMLDivElement>;
+type Key = JQuery<HTMLButtonElement>;
+
+type Container = JQuery<HTMLDivElement>;
 
 type ResolvedKey = ( value: JQuery<HTMLDivElement> |
     PromiseLike<JQuery<HTMLDivElement>> ) => void;
@@ -19,41 +19,41 @@ type ResolvedKey = ( value: JQuery<HTMLDivElement> |
  */
 const keys: string[] = ['CE', 'DEL', '%', '/', '7', '8', '9', 'x', '4', '5', '6', '-', '1', '2', '3', '+', '+/-', '0', '.', '='];
 
-const digitButton = ( button: JQuery<HTMLButtonElement> ): void => {
+const asDigit = ( button: Key ): void => {
     button.addClass( 'btn-primary' );
     button.data( 'role', 'digit' );
 }
 
-const commandButton = ( button: JQuery<HTMLButtonElement>, className: string = 'success' ): void => {
-    button.addClass( `btn-${className}` );
+const asCommand = ( button: Key ): void => {
+
+    let symbol: string = button.text();
+    let className: string = 'btn-'
+
+    if ( '=' == symbol )
+        className += 'danger';
+    else
+        className += 'success';
+
+    button.addClass( className );
     button.data( 'role', 'command' );
 }
 
+/**
+ * 
+ * @param symbol 
+ * @returns 
+ */
 const createKey = ( symbol: string ): Key => {
 
-    let key: Key = $( '<div>', { class: 'col-3 d-grid' } );
-    key.append( $( '<button>', {
-        class: 'fw-semibold btn',
-        text: symbol,
-        type: 'button'
-    } ) );
-    let button: JQuery<HTMLButtonElement> = key.find( 'button' );
-    if ( isNaN( <any>symbol ) ) {
-        switch ( symbol ) {
-            case '+/-':
-            case '.':
-                digitButton( button );
-                break;
-            case '=':
-                commandButton( button, 'danger' );
-                break;
-            default:
-                commandButton( button );
-                break;
-        }
-    } else {
-        digitButton( button );
-    }
+    let key: Key = $( '<button/>', { 'type': 'button' } );
+    key.addClass( 'fw-semibold btn' ).text( symbol );
+
+    // Si es un número...
+    if ( !isNaN( <any>symbol ) || symbol == '+/-' || symbol == '.' )
+        asDigit( key );
+    else
+        asCommand( key );
+
     return key;
 }
 
@@ -67,7 +67,7 @@ const buildKeyboard = async ( keys: Array<string> ): Promise<void> => {
                 row = $( '<div>', { class: 'row mt-3' } );
 
             let key = createKey( symbol );
-            row.append( key );
+            row.append( $( '<div>', { class: 'col-3 d-grid' } ).append( key ) );
             currentColumn++;
 
             if ( currentColumn === 4 ) {
