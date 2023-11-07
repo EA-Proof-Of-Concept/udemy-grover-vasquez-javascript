@@ -187,13 +187,15 @@ function writeDigit( digit: string ): void {
  * @param button
  */
 function resolveCommand( command: string ): void {
-    let screen = $( '#screen' );
     switch ( command ) {
         case 'CE':
-            screen.val( '0' );
+            setContentScreen( '0' );
             break;
         case 'DEL':
-            setContentScreen( del( <string>screen.val() ) );
+            setContentScreen( del() );
+            break;
+        default:
+            animateScreen( '#screen' );
             break;
     }
 }
@@ -203,11 +205,18 @@ function resolveCommand( command: string ): void {
  * @param {string} content
  * @returns {string}
  */
-function del( content: string ): string {
+function del(): string {
+    let content: string = <string>$( '#screen' ).val();
     if ( '0' !== content ) {
-        ( 1 === content.length )
-            ? content = '0'
-            : content = content.substring( 0, content.length - 1 );
+        if ( 1 === content.length ) {
+            content = '0';
+        } else {
+            if ( content.includes( '-' ) && content.length === 2 ) {
+                content = '0';
+            } else {
+                content = content.substring( 0, content.length - 1 );
+            }
+        }
     }
     return content;
 }
@@ -216,7 +225,19 @@ function setContentScreen( newContent: string ): void {
     let screen = $( '#screen' );
     screen.val( newContent );
 }
+//#endregion
 
+//#region -- Comandos --
+/**
+ *
+ * @param id
+ */
+function animateScreen( id: string ): void {
+    let display = $( id );
+    let value = <string>display.val();
+    display.val( '' );
+    setTimeout( () => display.val( value ), 100 );
+}
 //#endregion
 
 // Este evento de dispara al finalizar la carga completa del documento HTML.
