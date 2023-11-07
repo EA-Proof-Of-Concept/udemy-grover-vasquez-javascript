@@ -9,9 +9,9 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "strict": true,
-        "strictNullChecks": false,
+        "strictNullChecks": true,
         "strictFunctionTypes": true,
-        "strictPropertyInitialization": false,
+        "strictPropertyInitialization": true,
         "skipLibCheck": true
     },
     "include": [

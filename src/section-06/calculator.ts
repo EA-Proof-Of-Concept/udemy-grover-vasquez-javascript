@@ -22,7 +22,7 @@ type ResolvedComponent = ( value: Component |
 const keys: string[] = ['CE', 'DEL', '%', '/', '7', '8', '9', 'x', '4', '5', '6', '-', '1', '2', '3', '+', '+/-', '0', '.', '='];
 
 const asDigit = ( button: Key ): void => {
-    button.addClass( 'btn-info' );
+    button.addClass( 'btn-primary' );
     button.data( 'role', 'digit' );
 }
 
@@ -34,7 +34,7 @@ const asCommand = ( button: Key ): void => {
     if ( '=' == symbol )
         className += 'danger';
     else
-        className += 'secondary';
+        className += 'warning';
 
     button.addClass( className );
     button.data( 'role', 'command' );
@@ -110,9 +110,8 @@ async function buildCalculator( keys: string[] ): Promise<Component> {
  */
 function buildScreen(): Component {
 
-    let led = $( '<input>', { type: 'text', id: 'result' } );
-    led.addClass( 'ea-result form-control fs-1 text-end' )
-        .attr( 'readonly', 'true' ).val( '0' );
+    let led = $( '<input>', { type: 'text', id: 'screen', 'readonly': '' } );
+    led.addClass( 'ea-result form-control fs-1 text-end' ).val( '0' );
 
     let screen: Component = $( "<div>", {
         "class": "card-header container"
@@ -124,14 +123,76 @@ function buildScreen(): Component {
     return screen;
 }
 
-const configure = async () => {
+function addEvents() {
     const result = <HTMLInputElement>document.querySelector( '.ea-result' );
     result?.addEventListener( 'focus', ( ev: FocusEvent ): void => {
         if ( ev.target !== null )
             ( <HTMLInputElement>ev.target ).blur();
     } );
+
+    $( 'button' ).on( 'click', event => {
+        let button = <JQuery<HTMLButtonElement>>$( event.target );
+
+        let keyType = $( event.target ).data( 'role' );
+        if ( 'digit' == keyType )
+            resolveDigit( button );
+        else
+            resolveCommand( button );
+    } );
+}
+
+/**
+ *
+ * @param button
+ */
+function resolveDigit( button: JQuery<HTMLButtonElement> ): void {
+
+    let screen: JQuery<HTMLInputElement> = $( '#screen' );
+    let content: string = <string>screen.val();
+    const digit: string = button.text();
+
+    switch ( digit ) {
+        case '+/-':
+            if ( '0' !== content ) {
+                if ( content.includes( '-' ) )
+                    content = content.replace( '-', '' );
+                else
+                    content = '-' + content;
+            }
+            break;
+        case '.':
+        default:
+            if ( '0' === content )
+                content = digit;
+            else
+                content += digit;
+            break;
+    }
+    screen.val( content );
+}
+
+function resolveCommand( button: JQuery<HTMLButtonElement> ) {
+
+}
+
+/**
+ * Establece el contenido de la pantalla de la calculadora.
+ * @param content
+ */
+function setContentScreen( content: string ): void {
+    let screen = <JQuery<HTMLInputElement>>$( '#screen' );
+    if ( '0' === screen.val() )
+        screen.val( content );
+    else
+        screen.val( `${screen.val()}${content}` );
 }
 
 // Este evento de dispara al finalizar la carga completa del documento HTML.
 document.addEventListener( 'DOMContentLoaded', ( ev: Event ): void => {
+
+    buildCalculator( keys ).then( ( calculator: Component ): void => {
+        $( ".col-sm-12" ).append( calculator );
+        addEvents();
+    } );
+
 } );
