@@ -16,81 +16,20 @@ type ResolvedComponent = ( value: Component |
     PromiseLike<Component> ) => void;
 
 /**
- * Contiene los dígitos y operadores que deben
- * @type {string[]}
- */
+* Contiene los dígitos y operadores que deben
+* @type {string[]}
+*/
 const keys: string[] = ['CE', 'DEL', '%', '/', '7', '8', '9', 'x', '4', '5', '6', '-', '1', '2', '3', '+', '+/-', '0', '.', '='];
 
-const asDigit = ( button: Key ): void => {
-    button.addClass( 'btn-primary' );
-    button.data( 'role', 'digit' );
-}
-
-const asCommand = ( button: Key ): void => {
-
-    let symbol: string = button.text();
-    let className: string = 'btn-'
-
-    if ( '=' == symbol )
-        className += 'danger';
-    else
-        className += 'warning';
-
-    button.addClass( className );
-    button.data( 'role', 'command' );
-}
-
+//#region -- Funciones de construcción --
 /**
- *
- * @param symbol
- * @returns
- */
-const createKey = ( symbol: string ): Key => {
-
-    let key: Key = $( '<button/>', { 'type': 'button' } );
-    key.addClass( 'fw-semibold btn' ).text( symbol );
-
-    // Si es un número...
-    if ( !isNaN( <any>symbol ) || symbol == '+/-' || symbol == '.' )
-        asDigit( key );
-    else
-        asCommand( key );
-
-    return key;
-}
-
-function buildKeyboard( keys: string[] ): Component {
-    let currentColumn = 0;
-    let row: JQuery<HTMLDivElement>;
-
-    let keyboard: Component = $( "<div>", { "class": "card-body" } );
-
-    keys.forEach( ( symbol: string ) => {
-        if ( currentColumn === 0 )
-            row = $( '<div>', { class: 'row mt-3' } );
-
-        let key = createKey( symbol );
-        row.append( $( '<div>', { class: 'col-3 d-grid' } ).append( key ) );
-        currentColumn++;
-
-        if ( currentColumn === 4 ) {
-            keyboard.append( row );
-            currentColumn = 0;
-        }
-    } );
-
-    return keyboard;
-}
-
-/**
- *
- * @param keys
- * @returns
+ * Construye de manera asíncrona el componente visual de una calculadora.
+ * @param {string[]} keys Teclas de la calculadora.
+ * @returns {Promise<Component>}
  */
 async function buildCalculator( keys: string[] ): Promise<Component> {
     return ( new Promise<Component>(
         ( resolve: ResolvedComponent ) => {
-
             let calculator: Component = $( "<div>", { "class": "card" } );
 
             const screen: Component = buildScreen();
@@ -105,8 +44,8 @@ async function buildCalculator( keys: string[] ): Promise<Component> {
 }
 
 /**
- *
- * @param keys
+ * Construye la pantalla de la calculadora.
+ * @returns {Component}
  */
 function buildScreen(): Component {
 
@@ -123,76 +62,169 @@ function buildScreen(): Component {
     return screen;
 }
 
-function addEvents() {
-    const result = <HTMLInputElement>document.querySelector( '.ea-result' );
-    result?.addEventListener( 'focus', ( ev: FocusEvent ): void => {
-        if ( ev.target !== null )
-            ( <HTMLInputElement>ev.target ).blur();
+/**
+ * Construye el teclado de la calculadora.
+ * @param {string[]} keys Teclas de la calculadora.
+ * @returns {Component}
+ */
+function buildKeyboard( keys: string[] ): Component {
+    let currentColumn = 0;
+    let row: JQuery<HTMLDivElement>;
+
+    let keyboard: Component = $( "<div>", { "class": "card-body" } );
+
+    keys.forEach( ( symbol: string ) => {
+        if ( currentColumn === 0 )
+            row = $( '<div>', { class: 'row mt-3' } );
+
+        let key = buildKey( symbol );
+        row.append( $( '<div>', { class: 'col-3 d-grid' } ).append( key ) );
+        currentColumn++;
+
+        if ( currentColumn === 4 ) {
+            keyboard.append( row );
+            currentColumn = 0;
+        }
+    } );
+
+    return keyboard;
+}
+
+/**
+ * Crea una tecla con el símbolo especificado.
+ * @param {string} symbol Símbolo de la tecla.
+ * @returns {Key}
+ */
+function buildKey( symbol: string ): Key {
+
+    let key: Key = $( '<button/>', { 'type': 'button' } );
+    key.addClass( 'fw-semibold btn' ).text( symbol );
+
+    // Si es un número...
+    if ( !isNaN( <any>symbol ) || symbol == '+/-' || symbol == '.' )
+        asDigit( key );
+    else
+        asCommand( key );
+
+    return key;
+}
+
+/**
+ * Configura una tecla de la calculadora como dígito.
+ * @param {Key} button Tecla de la calculadora.
+ * @returns {void}
+ */
+function asDigit( button: Key ): void {
+    button.addClass( 'btn-primary' );
+    button.data( 'role', 'digit' );
+}
+
+/**
+ * Configura una tecla de la calculadora como comando.
+ * @param {Key} button Tecla de la calculador.
+ * @returns {void}
+ */
+function asCommand( button: Key ): void {
+    let symbol: string = button.text();
+    let className: string = 'btn-'
+
+    if ( '=' == symbol )
+        className += 'danger';
+    else
+        className += 'success';
+
+    button.addClass( className );
+    button.data( 'role', 'command' );
+}
+//#endregion
+
+//#region -- Eventos de la aplicación --
+/**
+ * Agrega los eventos a los controles de la aplicación.
+ * @returns {void}
+ */
+function addEventListeners(): void {
+    $( '#screen' ).on( 'focus', event => {
+        event.target.blur();
     } );
 
     $( 'button' ).on( 'click', event => {
-        let button = <JQuery<HTMLButtonElement>>$( event.target );
-
-        let keyType = $( event.target ).data( 'role' );
-        if ( 'digit' == keyType )
-            resolveDigit( button );
-        else
-            resolveCommand( button );
+        let key: Key = <Key>$( event.target );
+        ( 'digit' == key.data( 'role' ) )
+            ? writeDigit( key.text() )
+            : resolveCommand( key.text() );
     } );
+}
+
+/**
+ * Escribe el dígito pulsado en pantalla.
+ * @param {string} digit Dígito a escribir en la pantalla.
+ * @returns {void}
+ */
+function writeDigit( digit: string ): void {
+    let screen = $( '#screen' );
+    let content: string = <string>screen.val();
+
+    switch ( digit ) {
+        case '+/-':
+            if ( '0' !== content )
+                ( content.includes( '-' ) )
+                    ? content = content.replace( '-', '' )
+                    : content = '-' + content;
+            break;
+        case '.':
+        default:
+            ( '0' === content )
+                ? content = digit
+                : content += digit;
+            break;
+    }
+    screen.val( content );
 }
 
 /**
  *
  * @param button
  */
-function resolveDigit( button: JQuery<HTMLButtonElement> ): void {
-
-    let screen: JQuery<HTMLInputElement> = $( '#screen' );
-    let content: string = <string>screen.val();
-    const digit: string = button.text();
-
-    switch ( digit ) {
-        case '+/-':
-            if ( '0' !== content ) {
-                if ( content.includes( '-' ) )
-                    content = content.replace( '-', '' );
-                else
-                    content = '-' + content;
-            }
+function resolveCommand( command: string ): void {
+    let screen = $( '#screen' );
+    switch ( command ) {
+        case 'CE':
+            screen.val( '0' );
             break;
-        case '.':
-        default:
-            if ( '0' === content )
-                content = digit;
-            else
-                content += digit;
+        case 'DEL':
+            setContentScreen( del( <string>screen.val() ) );
             break;
     }
-    screen.val( content );
-}
-
-function resolveCommand( button: JQuery<HTMLButtonElement> ) {
-
 }
 
 /**
- * Establece el contenido de la pantalla de la calculadora.
- * @param content
+ * Borra un dígito tecleado por el usuario.
+ * @param {string} content
+ * @returns {string}
  */
-function setContentScreen( content: string ): void {
-    let screen = <JQuery<HTMLInputElement>>$( '#screen' );
-    if ( '0' === screen.val() )
-        screen.val( content );
-    else
-        screen.val( `${screen.val()}${content}` );
+function del( content: string ): string {
+    if ( '0' !== content ) {
+        ( 1 === content.length )
+            ? content = '0'
+            : content = content.substring( 0, content.length - 1 );
+    }
+    return content;
 }
+
+function setContentScreen( newContent: string ): void {
+    let screen = $( '#screen' );
+    screen.val( newContent );
+}
+
+//#endregion
 
 // Este evento de dispara al finalizar la carga completa del documento HTML.
 document.addEventListener( 'DOMContentLoaded', ( ev: Event ): void => {
 
     buildCalculator( keys ).then( ( calculator: Component ): void => {
         $( ".col-sm-12" ).append( calculator );
-        addEvents();
+        addEventListeners();
     } );
 
 } );
