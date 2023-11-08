@@ -3,17 +3,9 @@
  * Derechos intelecutales reservados.
  */
 
-body {
-    background-color: #3B3B3B;
-}
-
 .card {
     background-color: #3B3B3B;
     border-color: aliceblue;
-}
-
-.card-header {
-    border-bottom: 1px solid whitesmoke;
 }
 
 .ea-result {

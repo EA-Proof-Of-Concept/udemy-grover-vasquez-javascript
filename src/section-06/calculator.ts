@@ -15,11 +15,25 @@ type Component = JQuery<HTMLDivElement>;
 type ResolvedComponent = ( value: Component |
     PromiseLike<Component> ) => void;
 
+//#region -- Declaración de variables --
 /**
 * Contiene los dígitos y operadores que deben
 * @type {string[]}
 */
 const keys: string[] = ['CE', 'DEL', '%', '/', '7', '8', '9', 'x', '4', '5', '6', '-', '1', '2', '3', '+', '+/-', '0', '.', '='];
+
+/**
+ * Contiene el primer operando escrito antes presiionar una tecla de comando.
+ * @type {string}
+ */
+let firstOperand: string = '';
+
+/**
+ *
+ */
+let command: string = '';
+
+//#endregion
 
 //#region -- Funciones de construcción --
 /**
@@ -51,6 +65,7 @@ function buildScreen(): Component {
 
     let led = $( '<input>', { type: 'text', id: 'screen', 'readonly': '' } );
     led.addClass( 'ea-result form-control fs-1 text-end' ).val( '0' );
+    led.on( 'focus', e => e.target.blur() );
 
     let screen: Component = $( "<div>", {
         "class": "card-header container"
@@ -116,7 +131,7 @@ function buildKey( symbol: string ): Key {
  */
 function asDigit( button: Key ): void {
     button.addClass( 'btn-primary' );
-    button.data( 'role', 'digit' );
+    button.on( 'click', e => writeDigit( $( e.target ).text() ) );
 }
 
 /**
@@ -134,28 +149,11 @@ function asCommand( button: Key ): void {
         className += 'success';
 
     button.addClass( className );
-    button.data( 'role', 'command' );
+    button.on( 'click', e => resolveOperator( $( e.target ).text() ) );
 }
 //#endregion
 
 //#region -- Eventos de la aplicación --
-/**
- * Agrega los eventos a los controles de la aplicación.
- * @returns {void}
- */
-function addEventListeners(): void {
-    $( '#screen' ).on( 'focus', event => {
-        event.target.blur();
-    } );
-
-    $( 'button' ).on( 'click', event => {
-        let key: Key = <Key>$( event.target );
-        ( 'digit' == key.data( 'role' ) )
-            ? writeDigit( key.text() )
-            : resolveCommand( key.text() );
-    } );
-}
-
 /**
  * Escribe el dígito pulsado en pantalla.
  * @param {string} digit Dígito a escribir en la pantalla.
@@ -186,7 +184,7 @@ function writeDigit( digit: string ): void {
  *
  * @param button
  */
-function resolveCommand( command: string ): void {
+function resolveOperator( command: string ): void {
     switch ( command ) {
         case 'CE':
             setContentScreen( '0' );
@@ -195,7 +193,6 @@ function resolveCommand( command: string ): void {
             setContentScreen( del() );
             break;
         default:
-            animateScreen( '#screen' );
             break;
     }
 }
@@ -221,6 +218,7 @@ function del(): string {
     return content;
 }
 
+
 function setContentScreen( newContent: string ): void {
     let screen = $( '#screen' );
     screen.val( newContent );
@@ -228,6 +226,17 @@ function setContentScreen( newContent: string ): void {
 //#endregion
 
 //#region -- Comandos --
+
+function resolve( operator: string ): void {
+    firstOperand = <string>$( '#screen' ).val();
+    animateScreen( '#screem' );
+    command = operator;
+}
+
+function addition(): void {
+
+}
+
 /**
  *
  * @param id
@@ -242,10 +251,6 @@ function animateScreen( id: string ): void {
 
 // Este evento de dispara al finalizar la carga completa del documento HTML.
 document.addEventListener( 'DOMContentLoaded', ( ev: Event ): void => {
-
-    buildCalculator( keys ).then( ( calculator: Component ): void => {
-        $( ".col-sm-12" ).append( calculator );
-        addEventListeners();
-    } );
-
+    buildCalculator( keys ).then( calculator =>
+        $( ".col-sm-12" ).append( calculator ) );
 } );
