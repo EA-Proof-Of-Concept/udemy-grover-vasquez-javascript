@@ -1,0 +1,10 @@
+{
+  "name": "06-app-calculadora",
+  "version": "1.0.0",
+  "author": "Eric Adalberto Rodríguez Sánchez",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/jquery": "^3.5.32"
+  }
+}
