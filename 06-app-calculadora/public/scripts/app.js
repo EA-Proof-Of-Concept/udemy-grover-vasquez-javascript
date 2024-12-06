@@ -33,7 +33,15 @@ let firstOperand = '';
 /**
  * @type {string}
  */
-let command = '';
+let arithmeticOperation = '';
+
+const ZERO = '0.';
+
+/**
+ * Determina si se ha pulsado la tecla del punto decimal ('.').
+ * @type {boolean}
+ */
+let dot = false;
 
 //#endregion
 
@@ -70,7 +78,7 @@ async function buildCalculator( keys ) {
 function buildScreen() {
 
     let led = $( '<input>', { type: 'text', id: 'screen', 'readonly': '' } );
-    led.addClass( 'ea-result form-control fs-1 text-end' ).val( '0' );
+    led.addClass( 'ea-result form-control fs-1 text-end' ).val( ZERO );
     led.on( 'focus', ( e ) => {
         e.preventDefault();
         e.target.blur();
@@ -164,8 +172,21 @@ function asCommand( button ) {
         className += 'success';
 
     button.addClass( className );
-    button.on( 'click', e => resolveOperator( $( e.target ).text() ) );
+    button.on( 'click', e => setCommand( $( e.target ).text() ) );
 }
+//#endregion
+
+//#region -- Métodos de comportamiento --
+
+/**
+ * Retorna una cadena de números sin el punto decimal.
+ * @param {string} number Cadena de números con punto decimal.
+ * @returns {string}
+ */
+const removeDecimalPoint = ( number ) => {
+    return number.replace( '.', '' );
+}
+
 //#endregion
 
 //#region -- Eventos de la aplicación --
@@ -182,16 +203,25 @@ function writeDigit( digit ) {
 
     switch ( digit ) {
         case '+/-':
-            if ( '0' !== content )
+            if ( ZERO !== content )
                 ( content.includes( '-' ) )
                     ? content = content.replace( '-', '' )
                     : content = '-' + content;
             break;
         case '.':
+            dot = true;
+            break;
         default:
-            ( '0' === content )
-                ? content = digit
-                : content += digit;
+            if ( ZERO === content ) {
+                content = `${digit}.`;
+            } else {
+                if ( dot ) {
+                    content += digit
+                } else {
+                    content = removeDecimalPoint( content );
+                    content += `${digit}.`;
+                }
+            }
             break;
     }
     screen.val( content );
@@ -201,17 +231,33 @@ function writeDigit( digit ) {
  *
  * @param { string } command
  */
-function resolveOperator( command ){
+function setCommand( command ){
     switch ( command ) {
         case 'CE':
-            setContentScreen( '0' );
+            ce();
             break;
         case 'DEL':
             setContentScreen( del() );
             break;
         default:
+            firstOperand = /** @type {string} */ (
+                $( '#screen' ).val()
+            );
+            arithmeticOperation = command;
+            blink();
             break;
     }
+}
+
+/**
+ * Establece la pantalla de la calculadora en cero.
+ * @returns {string}
+ */
+function ce() {
+    setContentScreen( ZERO );
+    dot = false;
+    
+    return ZERO;
 }
 
 /**
@@ -222,14 +268,24 @@ function del() {
     
     let content = /** @type {string} */ ( $( '#screen' ).val() );
     
-    if ( '0' !== content ) {
-        if ( 1 === content.length ) {
-            content = '0';
+    if ( ZERO !== content ) {
+        if ( 2 === content.length ) {
+            content = ce();
         } else {
-            if ( content.includes( '-' ) && content.length === 2 ) {
-                content = '0';
+            if ( content.includes( '-' ) && content.length === 3 ) {
+                content = ce();
             } else {
-                content = content.substring( 0, content.length - 1 );
+                if ( content.endsWith( '.' ) && dot ) {
+                    dot = false;
+                } else {
+                    if ( dot ) {
+                        content = content.substring( 0, content.length - 1 );
+                    } else {
+                        content = removeDecimalPoint( content );
+                        content = content.substring( 0, content.length - 1 );
+                        content += '.';
+                    }
+                }
             }
         }
     }
@@ -249,13 +305,21 @@ function setContentScreen( newContent ) {
 
 /**
  * 
+ */
+function module() {
+    const number = /** @type {number} */ (
+        $( '#screen' ).val()
+    );
+    
+}
+
+/**
+ * 
  * @param {string} operator 
  * @returns {void}
  */
 function resolve( operator ) {
-    firstOperand = /** @type {string} */ ( $( '#screen' ).val() );
-    animateScreen( '#screen' );
-    command = operator;
+    
 }
 
 function addition() {
@@ -264,14 +328,14 @@ function addition() {
 
 /**
  *
- * @param {string} id
  * @returns {void}
  */
-function animateScreen( id ) {
-    let display = $( id );
-    let value = /** @type { string }*/ ( display.val() );
-    display.val( '' );
-    setTimeout( () => display.val( value ), 100 );
+function blink() {
+    /** @type {JQuery<HTMLInputElement>} */
+    let screen = $( '#screen' );
+    let content = /** @type {string} */ ( screen.val() );
+    screen.val( '' );
+    setTimeout( () => screen.val( content ), 100 );
 }
 //#endregion
 
