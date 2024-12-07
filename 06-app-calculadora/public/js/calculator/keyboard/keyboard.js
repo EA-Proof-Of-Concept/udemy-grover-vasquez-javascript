@@ -10,5 +10,13 @@
  * Representa el conjunto de teclas de números y operaciones de la calculadora.
  */
 export default class Keyboard {
+
+    /**
+     * 
+     * @param {string[]} keys Establece las teclas que 
+     */
+    constructor( keys ) {
+        
+    }
     
 }
