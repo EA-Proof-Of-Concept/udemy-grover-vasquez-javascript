@@ -1,0 +1,17 @@
+//@ts-check
+
+'use strict';
+
+/**
+ * Udemy: Introducción a la Programación con Javascript.
+ * @copyright Grover Vásquez
+ * Todos los derechos reservados.
+ */
+
+import AppConfig from "../config/app.config.js";
+import { web } from '../routers/router.js';
+import Server from "../server.js";
+
+const server = new Server();
+server.addModule( web );
+server.listen( AppConfig.port );
