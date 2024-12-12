@@ -8,6 +8,7 @@
 
 'use strict';
 
+import compression from 'compression';
 import { default as express } from 'express';
 import { engine } from 'express-handlebars';
 
@@ -41,11 +42,14 @@ export default class Server {
         this.#app.set( 'view engine', 'handlebars' );
         this.#app.set( 'views', './views');
 
+        this.#app.use( compression() );
         this.#app.use( '/', express.static( 'public' ) );
         this.#app.use( '/stylesheets',
             express.static( 'node_modules/bootstrap/dist/css' ) );
         this.#app.use( '/stylesheets',
             express.static( 'node_modules/bootstrap-icons/font' ) );
+        this.#app.use( '/javascripts',
+            express.static( 'node_modules/bootstrap/dist/js' ) );
     }
 
     /**
