@@ -8,5 +8,5 @@
 
 'use strict';
 
-export { web } from './web.router.js';
+export { web } from '../app/section-01/routes/section-one.js';
 
