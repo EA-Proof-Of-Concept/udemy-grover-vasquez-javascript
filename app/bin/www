@@ -1,0 +1,22 @@
+//@ts-check
+
+/**
+ * @copyright 2025 - Eazicom Servicios Profesionales.
+ * @author Eric Adalberto Rodríguez Sánchez <eazicomservicios@gmail.com>
+ * Todos los derechos reservados.
+ */
+
+'use strict';
+
+import Server from "../../server.js";
+import AppConfig from '../config/app.config.js';
+import { appRouter } from '../routers/app.router.js';
+
+/**
+ * @description Contiene la referencia al objeto del servidor de aplicaciones.
+ * @type {Server}
+ */
+const server = new Server();
+
+server.addRouter( appRouter );
+server.listen( AppConfig.port );

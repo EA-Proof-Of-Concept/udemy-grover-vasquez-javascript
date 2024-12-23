@@ -8,5 +8,5 @@
 
 'use strict';
 
-export { web } from './web.router.js';
+export { appRouter } from './app.router.js';
 
