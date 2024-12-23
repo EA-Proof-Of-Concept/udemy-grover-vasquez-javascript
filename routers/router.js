@@ -8,5 +8,5 @@
 
 'use strict';
 
-export { appRouter } from './app.router.js';
+export { sectionOne } from "../apps/section-one/entry-points/section-one.js";
 

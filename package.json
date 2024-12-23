@@ -5,8 +5,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "node --watch ./app/bin/www",
-    "start": "node ./app/bin/www"
+    "dev": "node --watch ./bin/www",
+    "start": "node ./bin/www"
   },
   "repository": {
     "type": "git",

@@ -14,10 +14,12 @@ import express from 'express';
  * @description Ejercicios de la sección uno.
  * @type {express.Router}
  */
-const sectionOne = express.Router();
+export const sectionOne = express.Router();
+
+sectionOne.get( '/', ( req, res ) => {
+    res.render( 'section-one' );
+} );
 
 sectionOne.get( '/section-one', ( req, res ) => {
     res.render( 'section-one' );
 } );
-
-export default sectionOne;

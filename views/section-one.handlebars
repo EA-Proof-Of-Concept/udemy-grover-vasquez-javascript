@@ -1,0 +1,29 @@
+<main class="container mt-5">
+    {{> shared/header }}
+    <div class="row">
+        <div class="col">
+            <p class="text-justify mt-2">En esta primera sección realizamos nuestro primer programa escrito en JavaScript. Haz clic en el siguiente botón para ejecutar el código.</p>
+            <button id="execute" class="btn btn-primary d-grid">Haz clic aquí</button>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <small class="font-monospace text-body-secondary">Resultado</small>
+                </div>
+                <div class="card-body">
+                    <p id="result" class="font-monospace text-danger"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+    document.addEventListener('DOMContentLoaded', (ev) => {
+        document.querySelector('#execute')?.addEventListener('click', (e) => {
+            document.querySelector('#result').innerText = '> ¡Hola mundo desde JavaScript!';
+        });
+    });
+    
+</script>

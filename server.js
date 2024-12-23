@@ -40,10 +40,10 @@ export default class Server {
         
         this.#app.engine( 'handlebars', engine( {
             extname: '.handlebars',
-            partialsDir: './app/views/partials/'
+            partialsDir: './views/partials/'
         } ) );
         this.#app.set( 'view engine', 'handlebars' );
-        this.#app.set( 'views', './app/views/' );
+        this.#app.set( 'views', './views/' );
 
         this.#app.use( compression() );
         this.#app.use( express.json() );
